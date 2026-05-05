@@ -1,70 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-body {
-  margin: 0;
-  background: black;
-  font-family: Arial;
-}
-
-.bola {
-  width: 80px;
-  height: 80px;
-  background: red;
-  border-radius: 50%;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  box-shadow: 0 0 20px red;
-  cursor: pointer;
-}
-
-.chat {
-  position: fixed;
-  bottom: 120px;
-  right: 20px;
-  width: 260px;
-  background: #111;
-  color: white;
-  padding: 10px;
-  border-radius: 10px;
-  display: none;
-}
-
-#mensagens {
-  height: 120px;
-  overflow-y: auto;
-  font-size: 14px;
-}
-
-input {
-  width: 75%;
-  margin-top: 5px;
-}
-
-button {
-  width: 23%;
-}
-</style>
-</head>
-
-<body>
-
-<div class="bola" onclick="abrirChat()"></div>
-
-<div class="chat" id="chatbox">
-  <div id="mensagens">🔴 ...Eu estou te observando.<br></div>
-  <input type="text" id="input" placeholder="Fala algo...">
-  <button onclick="responder()">Enviar</button>
-</div>
-
-<script>
-function abrirChat() {
-  let chat = document.getElementById("chatbox");
-  chat.style.display = (chat.style.display === "none") ? "block" : "none";
-}
-
 function responder() {
   let input = document.getElementById("input");
   let texto = input.value.toLowerCase();
@@ -74,18 +7,26 @@ function responder() {
 
   chat.innerHTML += "<br>🧑: " + texto;
 
-  let resposta = "🔴 Eu não entendi...";
+  let resposta = "";
 
-  if (texto.includes("oi")) resposta = "🔴 Eu já sabia que você viria.";
-  if (texto.includes("quem é você")) resposta = "🔴 Eu sou a Kairango.";
-  if (texto.includes("tchau")) resposta = "🔴 Você não pode sair.";
+  if (texto.includes("oi") || texto.includes("olá")) {
+    resposta = "🔴 Oi... eu estava esperando você.";
+  } 
+  else if (texto.includes("tudo bem")) {
+    resposta = "🔴 Depende... e você?";
+  }
+  else if (texto.includes("quem é você")) {
+    resposta = "🔴 Eu sou a Kairango.";
+  }
+  else if (texto.includes("nome")) {
+    resposta = "🔴 Eu sei o seu nome... mas não vou dizer.";
+  }
+  else {
+    resposta = "🔴 Interessante... continue.";
+  }
 
   chat.innerHTML += "<br>" + resposta;
-  input.value = "";
 
+  input.value = "";
   chat.scrollTop = chat.scrollHeight;
 }
-</script>
-
-</body>
-</html>
