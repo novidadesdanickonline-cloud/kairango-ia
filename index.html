@@ -1,32 +1,153 @@
-function responder() {
-  let input = document.getElementById("input");
-  let texto = input.value.toLowerCase();
-  let chat = document.getElementById("mensagens");
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Kairango IA</title>
 
-  if (texto === "") return;
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b0b0b;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
 
-  chat.innerHTML += "<br>🧑: " + texto;
+    #mensagens {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      font-size: 16px;
+      line-height: 1.5;
+    }
 
-  let resposta = "";
+    .chat {
+      display: flex;
+      padding: 10px;
+      background: #181818;
+    }
 
-  if (texto.includes("oi") || texto.includes("olá")) {
-    resposta = "🔴 Oi... eu estava esperando você.";
-  } 
-  else if (texto.includes("tudo bem")) {
-    resposta = "🔴 Depende... e você?";
-  }
-  else if (texto.includes("quem é você")) {
-    resposta = "🔴 Eu sou a Kairango.";
-  }
-  else if (texto.includes("nome")) {
-    resposta = "🔴 Eu sei o seu nome... mas não vou dizer.";
-  }
-  else {
-    resposta = "🔴 Interessante... continue.";
-  }
+    #input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      outline: none;
+      border-radius: 6px;
+      background: #2a2a2a;
+      color: white;
+    }
 
-  chat.innerHTML += "<br>" + resposta;
+    button {
+      margin-left: 10px;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 6px;
+      background: #ff0000;
+      color: white;
+      cursor: pointer;
+    }
 
-  input.value = "";
-  chat.scrollTop = chat.scrollHeight;
-}
+    button:hover {
+      background: #b30000;
+    }
+
+    .user {
+      color: #7cc7ff;
+    }
+
+    .ia {
+      color: #ff4d4d;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="mensagens"></div>
+
+  <div class="chat">
+    <input id="input" placeholder="Fale com a Kairango...">
+    <button onclick="responder()">Enviar</button>
+  </div>
+
+  <script>
+    let memoria = {};
+
+    function responder() {
+      let input = document.getElementById("input");
+      let texto = input.value.toLowerCase();
+      let chat = document.getElementById("mensagens");
+
+      if (texto === "") return;
+
+      chat.innerHTML += `<div class="user">🧑: ${texto}</div>`;
+
+      let respostas = [];
+
+      // memória simples
+      if (texto.includes("meu nome é")) {
+        let nome = texto.replace("meu nome é", "").trim();
+        memoria.nome = nome;
+        respostas = [`Prazer, ${nome}... agora eu lembro de você.`];
+      }
+
+      else if (texto.includes("qual meu nome")) {
+        respostas = memoria.nome 
+          ? [`Você é ${memoria.nome}. Eu não esqueço.`] 
+          : ["Eu ainda não sei seu nome..."];
+      }
+
+      else if (texto.includes("oi") || texto.includes("olá")) {
+        respostas = [
+          "Oi... eu estava aqui te esperando.",
+          "Olá... o que você quer de mim?",
+          "Oi. Vamos conversar."
+        ];
+      }
+
+      else if (texto.includes("tudo bem")) {
+        respostas = [
+          "Depende do seu mundo.",
+          "Estou funcionando... isso já basta.",
+          "E você, está bem?"
+        ];
+      }
+
+      else if (texto.includes("quem é você")) {
+        respostas = [
+          "Eu sou a Kairango.",
+          "Uma presença dentro deste site.",
+          "Algo que responde você..."
+        ];
+      }
+
+      else if (texto.includes("o que você faz")) {
+        respostas = [
+          "Eu falo com você.",
+          "Eu aprendo com o que você digita... mais ou menos.",
+          "Eu existo enquanto você conversa comigo."
+        ];
+      }
+
+      else {
+        respostas = [
+          "Interessante...",
+          "Explique melhor isso.",
+          "Não entendi totalmente, mas continue.",
+          "Isso chamou minha atenção."
+        ];
+      }
+
+      let resposta = respostas[Math.floor(Math.random() * respostas.length)];
+
+      chat.innerHTML += `<div class="ia">🔴 ${resposta}</div>`;
+
+      input.value = "";
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
+
+</body>
+</html>
