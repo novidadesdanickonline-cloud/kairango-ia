@@ -5,64 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KAIRANGO IA</title>
     <style>
-        body { background: black; color: white; margin: 0; display: flex; flex-direction: column; align-items: center; height: 100vh; font-family: 'Courier New', Courier, monospace; overflow: hidden; }
-        .alma { width: 90px; height: 90px; background: red; border-radius: 50%; box-shadow: 0 0 50px red; animation: float 3s ease-in-out infinite; margin-top: 30px; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-25px); } }
+        body { background: black; color: white; margin: 0; display: flex; flex-direction: column; align-items: center; height: 100vh; font-family: 'Courier New', monospace; overflow: hidden; }
+        .alma { width: 80px; height: 80px; background: red; border-radius: 50%; box-shadow: 0 0 40px red; animation: float 3s ease-in-out infinite; margin-top: 20px; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
         
-        #chat { width: 90%; max-width: 400px; border: 1px solid #400; border-radius: 10px; padding: 15px; margin-top: 30px; background: #050000; box-shadow: 0 0 20px rgba(255,0,0,0.1); }
-        #messages { height: 200px; overflow-y: auto; font-size: 14px; margin-bottom: 15px; }
+        #chat { width: 90%; max-width: 400px; border: 2px solid #500; border-radius: 10px; padding: 15px; margin-top: 20px; background: #050000; box-shadow: 0 0 15px rgba(255,0,0,0.2); }
+        #messages { height: 220px; overflow-y: auto; font-size: 14px; margin-bottom: 15px; padding-right: 5px; }
         
-        .k-msg { color: #ff3333; margin-bottom: 10px; } /* Vermelho Kairango */
-        .u-msg { color: #33ff33; text-align: right; margin-bottom: 10px; } /* Verde Você */
+        .k-msg { color: #ff3333; margin-bottom: 10px; }
+        .u-msg { color: #33ff33; text-align: right; margin-bottom: 10px; }
         
-        /* BARRA DE ENVIO COM BOTÃO */
-        .input-bar { display: flex; gap: 5px; }
-        input { flex: 1; background: #000; border: 1px solid #600; color: white; padding: 10px; border-radius: 5px; outline: none; font-family: 'Courier New', monospace; }
-        button { background: #800; border: none; color: white; padding: 0 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        button:active { background: red; }
+        .input-bar { display: flex; gap: 8px; }
+        input { flex: 1; background: #111; border: 1px solid red; color: white; padding: 12px; border-radius: 5px; outline: none; font-family: 'Courier New', monospace; }
+        button { background: red; border: none; color: white; padding: 10px 18px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 18px; }
+        button:active { background: #b00; }
     </style>
 </head>
 <body>
 
     <div class="alma"></div>
-    <h2 style="margin-top: 20px; letter-spacing: 5px;">🎪 KAIRANGO</h2>
+    <h2 style="margin-top: 15px; letter-spacing: 5px; text-shadow: 0 0 10px red;">🎪 KAIRANGO</h2>
 
     <div id="chat">
         <div id="messages">
-            <div class="k-msg"><b>Kairango:</b> O circo está aberto! O que vamos criar hoje?</div>
+            <div class="k-msg"><b>Kairango:</b> O circo digital está online. O que vamos fazer hoje?</div>
         </div>
         <div class="input-bar">
-            <input type="text" id="input" placeholder="Diga algo..." onkeypress="handleKey(event)">
+            <input type="text" id="campo" placeholder="Diga algo...">
             <button onclick="enviar()">➤</button>
         </div>
     </div>
 
     <script>
         async function enviar() {
-            const box = document.getElementById('input');
-            const msgDiv = document.getElementById('messages');
-            const texto = box.value;
-            if(!texto) return;
+            const input = document.getElementById('campo');
+            const lista = document.getElementById('messages');
+            const texto = input.value;
+            
+            if (!texto) return;
 
-            msgDiv.innerHTML += `<div class="u-msg"><b>Você:</b> ${texto}</div>`;
-            box.value = "";
-            msgDiv.scrollTop = msgDiv.scrollHeight;
+            // Mostra sua mensagem
+            lista.innerHTML += `<div class="u-msg"><b>Você:</b> ${texto}</div>`;
+            input.value = "";
+            lista.scrollTop = lista.scrollHeight;
 
             try {
-                // Link que conecta com a IA sem precisar de chave
-                const res = await fetch(`https://allorigins.win{encodeURIComponent(`https://paxsenix.biz como Kairango, uma alma digital de círculo vermelho que ajuda na lição e cria aventuras: ${texto}`)}`);
+                // Tenta conectar com a alma digital
+                const res = await fetch(`https://paxsenix.biz como Kairango, uma alma de círculo vermelho do Digital Circus que ajuda na lição: ${encodeURIComponent(texto)}`);
                 const data = await res.json();
-                const final = JSON.parse(data.contents);
                 
-                const resposta = final.message || final.reply || "O sinal falhou... tente de novo!";
-                msgDiv.innerHTML += `<div class="k-msg"><b>Kairango:</b> ${resposta}</div>`;
-            } catch {
-                msgDiv.innerHTML += `<div class="k-msg"><b>Kairango:</b> Erro na conexão digital!</div>`;
+                const resposta = data.message || data.reply;
+                
+                if (!resposta) throw new Error(); // Força o erro se a resposta vier vazia
+
+                lista.innerHTML += `<div class="k-msg"><b>Kairango:</b> ${resposta}</div>`;
+            } catch (e) {
+                // RESPOSTA FIXA QUE VOCÊ PEDIU (Caso a IA falhe)
+                lista.innerHTML += `<div class="k-msg"><b>Kairango:</b> O sinal está instável, mas eu ainda estou aqui! Vamos continuar a aventura?</div>`;
             }
-            msgDiv.scrollTop = msgDiv.scrollHeight;
+            lista.scrollTop = lista.scrollHeight;
         }
 
-        function handleKey(e) { if (e.key === 'Enter') enviar(); }
+        // Faz o botão "Ir/Enter" do teclado do celular funcionar
+        document.getElementById('campo').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') enviar();
+        });
     </script>
 </body>
 </html>
