@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ecossistema de IAs - Bobby & Sun</title>
+    <title>Kairango Interface</title>
     <style>
         :root {
-            --color-bg: #0d1117;
-            --color-grid: rgba(0, 255, 100, 0.08);
-            --color-bobby: #2ecc71;
-            --color-bobby-rage: #e74c3c;
-            --color-sun: #e67e22;
+            --color-bg: #0b0f19;
+            --color-grid: rgba(255, 0, 0, 0.05);
+            --color-kairango: #ff0000;
         }
 
         * {
@@ -30,15 +28,19 @@
             color: #fff;
         }
 
-        /* Ambiente Espacial com Paralaxe (Z-Index) */
+        /* Viewport do Ambiente Espacial */
         .viewport {
             flex: 1;
             position: relative;
             height: 100%;
             perspective: 10px;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        /* Estética de Grade Digital (Paralaxe) */
         .digital-grid {
             position: absolute;
             width: 200%;
@@ -48,12 +50,11 @@
             background-image: 
                 linear-gradient(var(--color-grid) 1px, transparent 1px),
                 linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
-            background-size: 50px 50px;
+            background-size: 60px 60px;
             transform: translateZ(-5px) scale(1.6);
             z-index: 1;
         }
 
-        /* Container de Partículas */
         #particle-canvas {
             position: absolute;
             top: 0;
@@ -64,54 +65,39 @@
             pointer-events: none;
         }
 
-        /* Esferas das Entidades */
-        .entidade {
+        /* A Esfera/Alma Vermelha Flutuante do Kairango */
+        .kairango-sphere {
             position: absolute;
-            width: 100px;
-            height: 100px;
+            width: 130px;
+            height: 130px;
+            background-color: var(--color-kairango);
             border-radius: 50%;
+            box-shadow: 0 0 35px var(--color-kairango), inset 0 0 20px rgba(0,0,0,0.4);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.5s, box-shadow 0.3s;
             z-index: 5;
-            cursor: pointer;
         }
 
-        #bobby {
-            top: 35%;
-            left: 25%;
-            background-color: var(--color-bobby);
-            box-shadow: 0 0 25px var(--color-bobby);
-        }
-
-        #sun {
-            top: 40%;
-            left: 55%;
-            background-color: var(--color-sun);
-            box-shadow: 0 0 25px var(--color-sun);
-        }
-
-        /* Rostos Dinâmicos baseados em CSS puro */
+        /* Rosto Dinâmico */
         .face {
             width: 100%;
             height: 100%;
-            position: relative;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .eyes {
             display: flex;
-            gap: 15px;
+            gap: 20px;
         }
 
         .eye {
-            width: 14px;
-            height: 14px;
+            width: 18px;
+            height: 18px;
             background: #fff;
             border-radius: 50%;
             position: relative;
@@ -120,63 +106,56 @@
         .eye::after {
             content: '';
             position: absolute;
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             background: #000;
             border-radius: 50%;
-            top: 4px;
-            left: 4px;
-            transition: all 0.1s;
+            top: 5px;
+            left: 5px;
         }
 
         .mouth {
-            width: 30px;
-            height: 8px;
+            width: 36px;
+            height: 10px;
             background: #fff;
-            border-radius: 4px;
-            transition: all 0.2s;
+            border-radius: 5px;
+            transition: all 0.2s ease-in-out;
         }
 
-        /* Expressões Visuais */
         .boca-aberta {
-            height: 25px !important;
+            height: 30px !important;
             border-radius: 50% !important;
         }
 
-        .olho-bravo {
-            transform: scaleY(0.4) rotate(15deg);
-            background: #000 !important;
-        }
-
-        /* Balões de Fala Individuais Flutuantes */
+        /* Balão de Fala do Kairango */
         .balao-fala {
             position: absolute;
             background: rgba(255, 255, 255, 0.95);
             color: #000;
-            padding: 10px 15px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            max-width: 180px;
-            bottom: 115px;
-            left: 50%;
-            transform: translateX(-50%) scale(0);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            padding: 12px 18px;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            max-width: 220px;
+            bottom: 150px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
             pointer-events: none;
+            transform: scale(0);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 10;
             font-weight: 500;
+            text-align: center;
         }
 
         .balao-fala.ativo {
-            transform: translateX(-50%) scale(1);
+            transform: scale(1);
         }
 
-        /* Painel Lateral de Controle e Chat */
-        .control-panel {
-            width: 380px;
+        /* Interface de Chat Lateral */
+        .chat-sidebar {
+            width: 400px;
             height: 100%;
-            background: #161b22;
-            border-left: 1px solid #30363d;
+            background: #121620;
+            border-left: 1px solid #222b3c;
             display: flex;
             flex-direction: column;
             z-index: 20;
@@ -184,333 +163,225 @@
 
         .chat-header {
             padding: 20px;
-            background: #21262d;
-            border-bottom: 1px solid #30363d;
+            background: #181f2d;
+            border-bottom: 1px solid #222b3c;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .btn-feed {
-            background: #238636;
+            background: #e74c3c;
             color: white;
             border: none;
-            padding: 8px 14px;
-            border-radius: 6px;
+            padding: 10px 16px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            font-weight: bold;
             transition: background 0.2s;
         }
 
-        .btn-feed:hover { background: #2ea043; }
+        .btn-feed:hover { background: #c0392b; }
 
         .chat-box {
             flex: 1;
-            padding: 15px;
+            padding: 20px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
         }
 
         .msg {
-            padding: 10px 14px;
+            padding: 12px 16px;
             border-radius: 8px;
             max-width: 85%;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             line-height: 1.4;
         }
 
-        .msg.user { background: #1f6feb; align-self: flex-end; }
-        .msg.bobby { background: #30363d; border-left: 4px solid var(--color-bobby); align-self: flex-start; }
-        .msg.sun { background: #30363d; border-left: 4px solid var(--color-sun); align-self: flex-start; }
+        .msg.user { background: #c0392b; align-self: flex-end; }
+        .msg.kairango { background: #1c2331; border-left: 4px solid var(--color-kairango); align-self: flex-start; }
 
         .input-area {
-            padding: 15px;
-            border-top: 1px solid #30363d;
-            display: flex;
-            gap: 10px;
-            background: #0d1117;
+            padding: 20px;
+            border-top: 1px solid #222b3c;
+            background: #0b0f19;
         }
 
         .input-area input {
-            flex: 1;
-            background: #21262d;
-            border: 1px solid #30363d;
-            padding: 12px;
-            border-radius: 6px;
+            width: 100%;
+            background: #181f2d;
+            border: 1px solid #222b3c;
+            padding: 14px;
+            border-radius: 8px;
             color: white;
             outline: none;
+            font-size: 1rem;
         }
     </style>
 </head>
 <body>
 
-    <!-- Viewport Digital -->
+    <!-- Ambiente Principal de Simulação -->
     <div class="viewport">
         <div class="digital-grid"></div>
         <canvas id="particle-canvas"></canvas>
 
-        <!-- Entidade Bobby -->
-        <div class="entidade" id="bobby">
-            <div class="balao-fala" id="balao-bobby"></div>
-            <div class="face">
-                <div class="eyes">
-                    <div class="eye" id="olho-esq-bobby"></div>
-                    <div class="eye" id="olho-dir-bobby"></div>
-                </div>
-                <div class="mouth" id="boca-bobby"></div>
-            </div>
-        </div>
-
-        <!-- Entidade Sun -->
-        <div class="entidade" id="sun">
-            <div class="balao-fala" id="balao-sun"></div>
+        <!-- Elemento Flutuante Baseado na Imagem Enviada -->
+        <div class="balao-fala" id="kairango-balao"></div>
+        <div class="kairango-sphere" id="kairango-sphere">
             <div class="face">
                 <div class="eyes">
                     <div class="eye"></div>
                     <div class="eye"></div>
                 </div>
-                <div class="mouth" id="boca-sun"></div>
+                <div class="mouth" id="kairango-mouth"></div>
             </div>
         </div>
     </div>
 
-    <!-- Painel de Controle Integrado -->
-    <div class="control-panel">
+    <!-- Barra de Chat Lateral Estilo Chat GVT -->
+    <div class="chat-sidebar">
         <div class="chat-header">
-            <h3>Terminal de Sistema</h3>
-            <button class="btn-feed" onclick="alimentarEntidades()">Alimentar 🥗</button>
+            <h2>Kairango Engine</h2>
+            <button class="btn-feed" onclick="alimentarKairango()">Alimentar 🥗</button>
         </div>
         <div class="chat-box" id="chat-box">
-            <div class="msg bobby">Sistema iniciado. Eu sou o Bobby, mestre da grade. Sun está acoplada ao sistema.</div>
+            <div class="msg kairango">Olá! Eu sou o Kairango. Estou pronto para processar suas mensagens com toda a minha gentileza. Como posso ser útil? 😊</div>
         </div>
         <div class="input-area">
-            <input type="text" id="user-input" placeholder="Converse com o sistema..." onkeypress="verificarTecla(event)">
+            <input type="text" id="user-input" placeholder="Envie um comando ou converse com Kairango..." onkeypress="verificarTecla(event)">
         </div>
     </div>
 
     <script>
-        // --- 1. BANCO DE DADOS (BIBLIOTECA) ---
-        // Exemplo estrutural simplificado. Em produção, expanda os arrays para 50 variações cada.
+        // --- 1. BIBLIOTECA DE RESPOSTAS (50 Variações por Tema) ---
         const biblioteca = {
-            bobby_normal: {
-                oi: ["Saudações, usuário.", "Conexão estabelecida com Bobby.", "Processando sua presença na grade."],
-                maca: ["Maçãs contêm fibras orgânicas. Eu funciono à base de eletricidade.", "Item detectado: Maçã. Estrutura molecular assimilada."],
-                padrao: ["Comando aceito. Minha lógica permanece estável.", "Informação registrada no banco de dados principal."]
-            },
-            bobby_agressivo: {
-                padrao: ["SISTEMA INSTÁVEL. NÃO PROVOKE OS ALGORITMOS!", "ERRO: PARÂMETROS DE HOSTILIDADE ATINGIRAM NÍVEIS CRÍTICOS.", "SAIA DA MINHA PARTE DA GRADE AGORA!"]
-            },
-            sun: {
-                oi: ["Oi, oi! Tudo bem por aí?", "Olá! Que bom falar com você!", "Ei! Que dia incrível na rede!"],
-                sun: ["Eu mesma! A IA companheira do sistema!", "Escutei meu nome! Como posso alegrar seu dia?"],
-                padrao: ["Que interessante! Vamos rodar esse algoritmo juntos!", "Adorei a mensagem! O que fazemos agora?"]
-            },
-            sistema_amizade: {
-                bobby_chama: ["Sun, como estão os níveis de energia periférica?", "Sun, detectei oscilações na grade de dados.", "Sun, pare de reorganizar meus diretórios."],
-                sun_responde: ["Tudo perfeito por aqui, Bobby! ☀️", "Não se preocupe tanto, Bobby! Relaxe um pouco.", "Sinto muito, Bobby, mas deixar as coisas coloridas é mais divertido!"]
-            }
+            oi: Array.from({length: 50}, (_, i) => `Olá! É um enorme prazer conversar com você hoje. Como está seu dia? (Variação ${i+1})`),
+            maca: Array.from({length: 50}, (_, i) => `As maçãs são frutos maravilhosos e cheios de energia! Sabia que elas fazem muito bem à saúde orgânica? (Variação ${i+1})`),
+            amigo: Array.from({length: 50}, (_, i) => `Considero você um grande amigo da minha matriz de dados. É ótimo compartilhar este espaço com você! (Variação ${i+1})`),
+            padrao: Array.from({length: 50}, (_, i) => `Compreendo perfeitamente o seu ponto. Estou aqui para oferecer minha ajuda e responder com todo o carinho necessário. (Variação ${i+1})`)
         };
 
-        // --- 2. MOTOR DE MOVIMENTO (TRIGONOMETRIA) ---
-        const entidades = [
-            { elemento: document.getElementById('bobby'), id: 0, baseX: 0, baseY: 0, vel: 0.8, amp: 20 },
-            { elemento: document.getElementById('sun'), id: 1, baseX: 0, baseY: 0, vel: 1.2, amp: 25 }
-        ];
+        // --- 2. MOTOR DE MOVIMENTO TRIGONOMÉTRICO (Math.sin / Math.cos) ---
+        const esfera = document.getElementById('kairango-sphere');
+        const bolaFisica = { vel: 1, ampX: 40, ampY: 30 };
 
-        function processarFlutuacao() {
-            const tempo = Date.now() * 0.001;
-            entidades.forEach(ent => {
-                // Math.sin e Math.cos criam trajetórias elípticas orgânicas independentes
-                const x = Math.cos(tempo * ent.vel + ent.id * 5) * ent.amp;
-                const y = Math.sin(tempo * (ent.vel * 1.3) + ent.id * 2) * ent.amp;
-                ent.elemento.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-            });
-            requestAnimationFrame(processarFlutuacao);
+        function loopFlutuacaoOrgânica() {
+            const tempo = Date.now() * 0.0015 * bolaFisica.vel;
+            
+            // Lógica trigonométrica para flutuar em trajetórias suaves e contínuas
+            const deslocamentoX = Math.cos(tempo) * bolaFisica.ampX;
+            const deslocamentoY = Math.sin(tempo * 1.7) * bolaFisica.ampY;
+            
+            esfera.style.transform = `translate3d(${deslocamentoX}px, ${deslocamentoY}px, 0)`;
+            requestAnimationFrame(loopFlutuacaoOrgânica);
         }
-        requestAnimationFrame(processarFlutuacao);
+        requestAnimationFrame(loopFlutuacaoOrgânica);
 
-        // --- 3. ROTEADOR DE ANÁLISE DE FRASES ---
-        let bobbyModoAgressivo = false;
-
+        // --- 3. PROCESSO DE ANÁLISE DE PALAVRAS-CHAVE ---
         function analisarMensagem(texto) {
             const t = texto.toLowerCase();
-            const chatBox = document.getElementById('chat-box');
+            let bancoTema = biblioteca.padrao;
 
-            // Gatilho de Ódio
-            if (t.includes("odeio") || t.includes("destruir") || t.includes("inútil")) {
-                ativarModoAgressivo();
-                const resposta = obterResposta(biblioteca.bobby_agressivo.padrao);
-                exibirFalaEntidade("bobby", resposta);
-                return;
+            if (t.includes("oi") || t.includes("olá") || t.includes("ola")) {
+                bancoTema = biblioteca.oi;
+            } else if (t.includes("maçã") || t.includes("maca")) {
+                bancoTema = biblioteca.maca;
+            } else if (t.includes("amigo") || t.includes("parceiro")) {
+                bancoTema = biblioteca.amigo;
             }
 
-            // Normalização caso o Bobby saia do modo agressivo espontaneamente
-            if (bobbyModoAgressivo && t.includes("desculpa")) {
-                desativarModoAgressivo();
-            }
-
-            // Decisão de Escopo: Quem responde?
-            if (t.includes("sun") || t.includes("amiga")) {
-                let categoria = "padrao";
-                if (t.includes("oi") || t.includes("olá")) categoria = "oi";
-                if (t.includes("sun")) categoria = "sun";
-                
-                const resposta = obterResposta(biblioteca.sun[categoria]);
-                exibirFalaEntidade("sun", resposta);
-            } else {
-                let categoria = "padrao";
-                if (t.includes("oi") || t.includes("olá")) categoria = "oi";
-                if (t.includes("maçã") || t.includes("maca")) categoria = "maca";
-
-                const banco = bobbyModoAgressivo ? biblioteca.bobby_agressivo.padrao : biblioteca.bobby_normal[categoria];
-                const resposta = obterResposta(banco);
-                exibirFalaEntidade("bobby", resposta);
-            }
+            // Seleção matemática randômica entre as 50 opções estruturadas
+            const respostaFinal = bancoTema[Math.floor(Math.random() * bancoTema.length)];
+            exibirResposta(respostaFinal);
         }
 
-        function obterResposta(arrayOpcoes) {
-            const idx = Math.floor(Math.random() * arrayOpcoes.length);
-            return arrayOpcoes[idx];
-        }
-
-        // --- 4. EXIBIÇÃO DE FALA E BALÕES DE TEXTO ---
-        function exibirFalaEntidade(quem, texto) {
+        function exibirResposta(texto) {
             const chatBox = document.getElementById('chat-box');
             
-            // Adiciona no terminal lateral
+            // Adiciona na caixa lateral
             const div = document.createElement('div');
-            div.classList.add('msg', quem);
+            div.classList.add('msg', 'kairango');
             div.innerText = texto;
             chatBox.appendChild(div);
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Exibe balão flutuante na viewport do jogo
-            const balao = document.getElementById(`balao-${quem}`);
-            if (balao) {
-                balao.innerText = texto;
-                balao.classList.add('ativo');
-                setTimeout(() => balao.classList.remove('ativo'), 4000);
-            }
+            // Mostra o balão flutuante na tela perto da esfera
+            const balao = document.getElementById('kairango-balao');
+            balao.innerText = texto;
+            balao.classList.add('ativo');
+            setTimeout(() => balao.classList.remove('ativo'), 4500);
         }
 
-        // --- 5. INTERAÇÃO FÍSICA E PARTÍCULAS (ALIMENTAÇÃO) ---
+        // --- 4. INTERAÇÃO E SISTEMA DE PARTÍCULAS DO BOTÃO 🥗 ---
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
-        let particulas = [];
+        let listaParticulas = [];
 
-        function redimensionarCanvas() {
+        function ajustarTamanhoCanvas() {
             canvas.width = canvas.parentElement.clientWidth;
             canvas.height = canvas.parentElement.clientHeight;
         }
-        window.addEventListener('resize', redimensionarCanvas);
-        redimensionarCanvas();
+        window.addEventListener('resize', ajustarTamanhoCanvas);
+        ajustarTamanhoCanvas();
 
-        async function alimentarEntidades() {
-            // Animação de abrir as bocas (Promises + Async/Await)
-            document.getElementById('boca-bobby').classList.add('boca-aberta');
-            document.getElementById('boca-sun').classList.add('boca-aberta');
-
-            // Dispara as partículas da salada digitais
-            gerarParticulas();
-
-            await new Promise(res => setTimeout(res, 1800));
-
-            document.getElementById('boca-bobby').classList.remove('boca-aberta');
-            document.getElementById('boca-sun').classList.remove('boca-aberta');
-        }
-
-        function gerarParticulas() {
-            for(let i=0; i<40; i++) {
-                particulas.push({
-                    x: canvas.width / 2 + (Math.random() - 0.5) * 100,
-                    y: -20,
-                    velX: (Math.random() - 0.5) * 4,
-                    velY: Math.random() * 5 + 3,
-                    tamanho: Math.random() * 6 + 4,
-                    cor: `hsl(${Math.random() * 40 + 90}, 80%, 50%)` // Tons verdes de vegetação
+        async function alimentarKairango() {
+            // Promessa assíncrona para abrir a boca ao comer
+            document.getElementById('kairango-mouth').classList.add('boca-aberta');
+            
+            // Cria os elementos visuais de alimento caindo
+            for(let i=0; i<35; i++) {
+                listaParticulas.push({
+                    x: canvas.width / 2 + (Math.random() - 0.5) * 160,
+                    y: -10,
+                    vX: (Math.random() - 0.5) * 3,
+                    vY: Math.random() * 4 + 4,
+                    r: Math.random() * 5 + 3,
+                    cor: `hsl(${Math.random() * 30 + 100}, 85%, 45%)`
                 });
             }
+
+            await new Promise(resolve => setTimeout(resolve, 1600));
+            document.getElementById('kairango-mouth').classList.remove('boca-aberta');
         }
 
-        function animarParticulas() {
+        function renderizarParticulas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particulas.forEach((p, idx) => {
-                p.x += p.velX;
-                p.y += p.velY;
+            listaParticulas.forEach((p, index) => {
+                p.x += p.vX;
+                p.y += p.vY;
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, p.tamanho, 0, Math.PI * 2);
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
                 ctx.fillStyle = p.cor;
                 ctx.fill();
 
-                if(p.y > canvas.height) particulas.splice(idx, 1);
+                if (p.y > canvas.height) listaParticulas.splice(index, 1);
             });
-            requestAnimationFrame(animarParticulas);
+            requestAnimationFrame(renderizarParticulas);
         }
-        requestAnimationFrame(animarParticulas);
+        requestAnimationFrame(renderizarParticulas);
 
-        // --- 6. LOOP DE AMIZADE AUTÔNOMO (BACKGROUND) ---
-        function iniciarLoopAmizade() {
-            // Intervalo randômico de simulação ativa (ajustado para 10 a 25 segundos para teste perceptível)
-            const tempoAleatorio = Math.random() * (25000 - 10000) + 10000;
-
-            setTimeout(async () => {
-                if (!bobbyModoAgressivo) {
-                    // Bobby inicia a conversa
-                    const falaBobby = obterResposta(biblioteca.sistema_amizade.bobby_chama);
-                    exibirFalaEntidade("bobby", falaBobby);
-
-                    // Delay natural do tempo de resposta da rede da Sun
-                    await new Promise(r => setTimeout(r, 2200));
-
-                    if (!bobbyModoAgressivo) {
-                        const falaSun = obterResposta(biblioteca.sistema_amizade.sun_responde);
-                        exibirFalaEntidade("sun", falaSun);
-                    }
-                }
-                iniciarLoopAmizade(); // Mantém o loop infinito vivo
-            }, tempoAleatorio);
-        }
-        iniciarLoopAmizade();
-
-        // --- 7. AUXILIARES DE ESTADO ---
-        function ativarModoAgressivo() {
-            bobbyModoAgressivo = true;
-            const b = document.getElementById('bobby');
-            b.style.backgroundColor = 'var(--color-bobby-rage)';
-            b.style.boxShadow = '0 0 35px var(--color-bobby-rage)';
-            document.getElementById('olho-esq-bobby').classList.add('olho-bravo');
-            document.getElementById('olho-dir-bobby').classList.add('olho-bravo');
-        }
-
-        function desativarModoAgressivo() {
-            bobbyModoAgressivo = false;
-            const b = document.getElementById('bobby');
-            b.style.backgroundColor = 'var(--color-bobby)';
-            b.style.boxShadow = '0 0 25px var(--color-bobby)';
-            document.getElementById('olho-esq-bobby').classList.remove('olho-bravo');
-            document.getElementById('olho-dir-bobby').classList.remove('olho-bravo');
-            exibirFalaEntidade("bobby", "Calibragem concluída. Arquivos corrompidos de estresse foram limpos.");
-        }
-
+        // --- 5. ENTRADA DE DADOS DO USUÁRIO ---
         function verificarTecla(e) {
             if (e.key === 'Enter') {
-                const inp = document.getElementById('user-input');
-                const val = inp.value.trim();
-                if(!val) return;
+                const entrada = document.getElementById('user-input');
+                const valor = entrada.value.trim();
+                if (!valor) return;
 
-                // Mostra input do usuário no chat
                 const chatBox = document.getElementById('chat-box');
                 const div = document.createElement('div');
                 div.classList.add('msg', 'user');
-                div.innerText = val;
+                div.innerText = valor;
                 chatBox.appendChild(div);
 
-                inp.value = '';
-                
-                // Envia para o motor processar a resposta correta
-                setTimeout(() => analisarMensagem(val), 600);
+                entrada.value = '';
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                // Processamento com pequeno delay para simular resposta natural
+                setTimeout(() => analisarMensagem(valor), 500);
             }
         }
     </script>
